@@ -5,15 +5,15 @@ import {Section} from 'view/Shared/Structural'
 import {P} from 'view/Shared/Typography'
 import Switch from 'view/Switch'
 
-function Loading () {
+function Loading ({data}) {
   return <P>Loading</P>
 }
 
-function NoData () {
+function NoData ({data}) {
   return <P>No Data</P>
 }
 
-function Data () {
+function Data ({data}) {
   return <P>Data</P>
 }
 

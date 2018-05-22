@@ -13,31 +13,39 @@ const LOADING = 'LOADING'
 const NO_DATA = 'NO_DATA'
 const DATA = 'DATA'
 
+const loadingComparator = data => !data
+const noDataComparator = data => (data && (data.length === 0))
+
 export const SwitchContext = React.createContext({
-  state: LOADING
+  state: LOADING,
+  data: undefined
 })
 
 export class Switch extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      state: LOADING
+      state: LOADING,
+      data: this.props.data
     }
   }
 
   static getDerivedStateFromProps (nextProps, prevState) {
     switch (true) {
-      case (!nextProps.data):
+      case (nextProps.loadingComparator(nextProps.data)):
         return {
-          state: LOADING
+          state: LOADING,
+          data: nextProps.data
         }
-      case (nextProps.data && nextProps.data.length === 0):
+      case (nextProps.noDataComparator(nextProps.data)):
         return {
-          state: NO_DATA
+          state: NO_DATA,
+          data: nextProps.data
         }
       default:
         return {
-          state: DATA
+          state: DATA,
+          data: nextProps.data
         }
     }
   }
@@ -54,14 +62,22 @@ export class Switch extends React.Component {
 }
 
 Switch.propTypes = {
-  data: PropTypes.any
+  data: PropTypes.any,
+  loadingComparator: PropTypes.func,
+  noDataComparator: PropTypes.func
 }
 
+Switch.defaultProps = {
+  loadingComparator,
+  noDataComparator
+}
+
+// Render loading component.
 function Loading ({render}) {
   return (
     <SwitchContext.Consumer>
-      {({state}) => {
-        return (state === LOADING) ? React.createElement(render) : null
+      {({data, state}) => {
+        return (state === LOADING) ? React.createElement(render, {data}) : null
       }}
     </SwitchContext.Consumer>
   )
@@ -73,11 +89,12 @@ Loading.propTypes = {
 
 Loading.displayName = 'Loading'
 
+// Render component with empty data.
 function NoData ({render}) {
   return (
     <SwitchContext.Consumer>
-      {({state}) => {
-        return (state === NO_DATA) ? React.createElement(render) : null
+      {({data, state}) => {
+        return (state === NO_DATA) ? React.createElement(render, {data}) : null
       }}
     </SwitchContext.Consumer>
   )
@@ -89,11 +106,12 @@ NoData.propTypes = {
 
 NoData.displayName = 'NoData'
 
+// Render Component with Data.
 function Data ({render}) {
   return (
     <SwitchContext.Consumer>
-      {({state}) => {
-        return (state === DATA) ? React.createElement(render) : null
+      {({data, state}) => {
+        return (state === DATA) ? React.createElement(render, {data}) : null
       }}
     </SwitchContext.Consumer>
   )
