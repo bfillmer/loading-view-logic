@@ -4,7 +4,7 @@ import {ThemeProvider} from 'styled-components'
 
 import {Application} from 'view/Shared/Structural'
 import {Header} from 'view/Global/Header'
-import {Routes} from 'view/Routes'
+import {List} from 'view/List'
 
 import {theme} from 'view/theme'
 
@@ -13,7 +13,7 @@ export function App () {
     <ThemeProvider theme={theme}>
       <Application>
         <Header />
-        <Routes />
+        <List />
       </Application>
     </ThemeProvider>
   )
